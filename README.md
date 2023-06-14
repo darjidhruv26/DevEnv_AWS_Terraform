@@ -1,15 +1,15 @@
+# Project :)
 # DevEnv_AWS_Terraform
 
 ![tf_aws ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/ce02599c-20bb-44cd-8964-e34c81e33018)
 
 - HashiCorp Terraform is an infrastructure as code tool that lets you define both cloud and on-prem resources in human-readable configuration files that you can version, reuse, and share. You can then use a consistent workflow to provision and manage all of your infrastructure throughout its lifecycle. Terraform can manage low-level components like compute, storage, and networking resources, as well as high-level components like DNS entries and SaaS features.
 
-# Stape: 1
+# Step 1:
 
-- Create a file 
-```providers.tf```
+- Create a file ```providers.tf```
 ```bash
-  terraform {
+terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -28,13 +28,13 @@ And run this command `terraform init`
 
 [Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
 
-# Stape: 2 Create a VPC environment
+# Step 2: Create a VPC environment
 
-## Stape: 2.1 Deploy the VPC
+## Step 2.1: Deploy the VPC
 
 - Create a file `main.tf `
 ```bash
-  resource "aws_vpc" "dhruv_vpc" {
+resource "aws_vpc" "dhruv_vpc" {
   cidr_block           = "10.123.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -47,7 +47,7 @@ And run this command `terraform init`
 ![vpc ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/4d1670c2-8f19-440e-ab92-bb62f17826f5)
 [Terraform Docs Reference for creating a VPC](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 
-## Stape: 2.2 Deploy Subnet
+## Step 2.2: Deploy Subnet
 
 - Add subnet configuretions in `main.tf`
 ```bash
@@ -65,7 +65,7 @@ resource "aws_subnet" "dhruv_public_subnet" {
 ![subnet ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/c308f5ae-8214-4e3b-b035-ef8cdd21a0cf)
 [Terraform Docs Reference for creating a Subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
 
-## Stape: 2.3 Create Internet Gateway
+## Step 2.3: Create Internet Gateway
 
 - Add Internet Gateway configuretions in `main.tf`
 ```bash
@@ -81,9 +81,9 @@ resource "aws_internet_gateway" "dhruv_internet_gateway" {
 
 [Terraform Docs Reference for creating a Internet Gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)
 
-## Stape: 2.4 Create Route Table
+## Step 2.4: Create Route Table
 
-- Add Route Table configuretions in `main.tf`
+- Add Route Table configuretions in `main.tf`.
 ```bash
 resource "aws_route_table" "dhruv_public_rt" {
   vpc_id = aws_vpc.dhruv_vpc.id
@@ -93,7 +93,7 @@ resource "aws_route_table" "dhruv_public_rt" {
   }
 }
 ```
-### Defining Route
+### Step 2.4.1: Defining Route
 - Add Route in `main.tf`
 ```bash
 resource "aws_route" "def_route" {
@@ -102,7 +102,7 @@ resource "aws_route" "def_route" {
   gateway_id             = aws_internet_gateway.dhruv_internet_gateway.id
 }
 ```
-### Associate subnet with Route Table
+### Step 2.4.2: Associate subnet with Route Table
 - Associate subnet with route table in `main.tf`
 ```bash
 resource "aws_route_table_association" "dhruv_public_assoc" {
@@ -113,11 +113,11 @@ resource "aws_route_table_association" "dhruv_public_assoc" {
 
 ![Rt table ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/111fc7c7-6f27-489c-966e-f0e9f91f9cbb)
 
-[Terraform Docs Reference for creating a Route Table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
+Terraform Docs Reference for creating a [Route Table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table).
 [Terraform Docs Reference for defining a Route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route)
 [Terraform Docs for Route table association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
 
-## Stape:2.5 Create Security Group
+## Step 2.5: Create Security Group
 - Add sucurity group in `main.tf`
 ```bash
 resource "aws_security_group" "dhruv_sg" {
@@ -142,13 +142,16 @@ resource "aws_security_group" "dhruv_sg" {
 
 [Terraform Docs for creating a security group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
 
-# Stape: 3 Creating a EC2 Instance
+# Step 3: Creating a EC2 Instance
 
-## Selecte AMI Id for creating a EC2 Instance
+## Step 3.1: Selecte AMI Id for creating a EC2 Instance
 - In this project we use `Ubuntu Server-20.04`
 - AMI ID: `ami-08e5424edfe926b43`
 - AMI Name: `ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230517`
 - Owner ID: `099720109477`
+
+- Create new file `datasources.tf`
+
 ```bash
 data "aws_ami" "server_ami" {
   most_recent = true
@@ -159,9 +162,95 @@ data "aws_ami" "server_ami" {
   }
 }
 ```
- ## Create Key-Pairs
+ ## Step 3.2: Create Key-Pairs
  
-[Terraform Docs for AMI](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ami)
+ ### Step 3.2.1: Generate SSH key
+ - Go to VS Code terminal and run this command `ssh-keygen -t ed25519` and press Enter
+ - You can see this type of output 
+ ```
+ Generating public/private ed25519 key pair.
+ C:\Users\Dhruv/.ssh/id_ed25519):
+ ```
+ - Copy this path `C:\Users\Dhruv/.ssh/` and enter your `Key Name`.
+ - It look like this
+ ```C:\Users\Dhruv/.ssh/dhruvkey```
+ - And then pess `Enter`
+ - key was generated After that run this command in terminal `ls ~/.ssh`
+ - You can see all directories and files in `C:\Users\Dhruv\.ssh` 
+ - In this you can see `dhruvkey` and `dhruvkey.pub`
+ 
+ ### Step 3.2.2: Key Apply
+ - In this part, we use [terraform file function](https://developer.hashicorp.com/terraform/language/functions/file) for pass public key as file `path`.
+ 
+ - Add this configuretions in `main.tf`.
+ ```
+ resource "aws_key_pair" "dhruv_auth" {
+  key_name   = "dhruvkey"
+  public_key = file("~/.ssh/dhruvkey.pub")
+}
+ ```
+ ![key pairs](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/01e38487-a85b-4d37-b8b1-ea4bcd19a29b)
+
+## Step 3.3: Deploy EC2 Instance
+
+- Create Template file `userdata.tpl` for update and install docker
+```
+#!/bin/bash
+sudo apt-get update -y &&
+sudo apt-get install -y \
+apt-transport-https \
+ca-certificates \
+curl \
+gnupg-agent \
+software-properties-common &&
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - &&
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" &&
+sudo apt-get update -y &&
+sudo sudo apt-get install docker-ce docker-ce-cli containerd.io -y &&
+sudo usermod -aG docker ubuntu 
+```
+- Add this EC2 instance configuretions in `main.tf` file.
+
+```
+resource "aws_instance" "dhruv_node" {
+  instance_type          = "t2.micro"
+  ami                    = data.aws_ami.server_ami.id
+  key_name               = aws_key_pair.dhruv_auth.id
+  vpc_security_group_ids = [aws_security_group.dhruv_sg.id]
+  subnet_id              = aws_subnet.dhruv_public_subnet.id
+  user_data              = file("userdata.tpl")
+  root_block_device {
+    volume_size = 10
+  }
+  tags = {
+    Name = "dhruv-node"
+  }
+```
+ ![ec2 ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/b3d1aeed-c743-46a6-8eba-f92395270586)
+
+## Step 3.4: Connect EC2 instance with local system
+
+- For this task run a `ssh -i C:\Users\Dhruv\.ssh\dhruvkey ubuntu@13.233.64.121` in terminal and press `Enter` -> Type `Yes` -> (you are in instance)  
+
+Terraform Docs for [AMI](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ami).
+Terraform Docs for [aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair).
+Terraform Docs for [Terraform file function](https://developer.hashicorp.com/terraform/language/functions/file).
+Terraform Docs for [AWS Instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance).
+
+
+# Step 4: Create SSH Config Scripts
+- This SSH configuration script is to allow VS Code to connect our EC2 Instance.
+- Create Template file `ssh-config.tpl` for windows system.
+
+```
+add-content -path C:/Users/DHRUV/.ssh/config -value @'
+
+Host ${hostname}
+  HostName ${hostname}
+  User ${user}
+  IdentityFile ${identityfile}
+'@  
+```
 
 ```terraform plan```
 - The `terraform plan` command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. By default, when Terraform creates a plan it:
@@ -171,6 +260,7 @@ data "aws_ami" "server_ami" {
 
 ```teraform fmt```
 - The `terraform fmt` command is used to rewrite Terraform configuration files to a canonical format and style. This command applies a subset of the Terraform language style conventions, along with other minor adjustments for readability.
+
 ```terraform state```
 - The command will list all resources in the state file matching the given addresses (if any). If no addresses are given, all resources are listed.
 ![tf state list](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/031fbf1a-a415-4585-a5e1-0cbea66dcd06)
@@ -181,6 +271,6 @@ data "aws_ami" "server_ami" {
 ```terraform apply```
 - When you run `terraform apply` without passing a saved plan file, Terraform automatically creates a new execution plan as if you had run terraform plan, prompts you to approve that plan, and takes the indicated actions. You can use all of the planning modes and planning options to customize how Terraform will create the plan.You can pass the `-auto-approve` option to instruct Terraform to apply the plan without asking for confirmation.
 
-```terraform destroy``
+```terraform destroy```
 - The `terraform destroy` command is a convenient way to destroy all remote objects managed by a particular Terraform configuration.
 
