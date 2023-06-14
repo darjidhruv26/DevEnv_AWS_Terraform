@@ -243,7 +243,7 @@ Terraform Docs for [AWS Instances](https://registry.terraform.io/providers/hashi
 - Create Template file `ssh-config.tpl` for windows system.
 
 ```
-add-content -path C:/Users/DHRUV/.ssh/config -value @'
+add-content -path C:/Users/Dhruv/.ssh/config -value @'
 
 Host ${hostname}
   HostName ${hostname}
