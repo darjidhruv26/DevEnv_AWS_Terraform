@@ -251,6 +251,31 @@ Host ${hostname}
   IdentityFile ${identityfile}
 '@  
 ```
+## Step 4.1: Add provisioner
+
+- Add provisioner in `main.tf` file.
+
+```
+  provisioner "local-exec" {
+    command = templatefile("${var.host_os}-ssh-config.tpl", {
+      hostname     = self.public_ip,
+      user         = "ubuntu",
+      identityfile = "~/.ssh/dhruvkey"
+    })
+    interpreter = var.host_os == "windows" ? ["Powershell", "-command"] : ["bash", "-c"]
+  }
+}
+```
+- After provisioner run this command in terminal `cat ~/.ssh/config`.
+- Output is look like this.
+![ssh config](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/cbb0b9d5-1689-4c0d-99fc-a49c7740873e)
+
+- After that follow this flow
+```In Vs code -> View -> Command Palette.. -> Remote-SSH: Connect to Host.. -> select(13.233.64.121) -> Open new VS code Window -> Linux -> Continue -> And see Output like this ```
+
+![VS remote ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/05f392f0-b7ef-41cc-8dc2-d4164c89b522)
+
+Terraform Docs [provisioners](https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax)
 
 ```terraform plan```
 - The `terraform plan` command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. By default, when Terraform creates a plan it:
