@@ -8,7 +8,7 @@
 
 # Simple Project Architecture
 
-![Slide1](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/94c3c33a-938e-4cd4-ac2b-20917bc6a5ee)
+![Slide1](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/54bc89cb-a66d-4d0f-ae42-587ceac2e8f9)
 
 # Step 1: AWS Provider
 
