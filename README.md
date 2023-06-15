@@ -1,6 +1,6 @@
 # Project :)
 
-# DevEnv_AWS_Terraform
+# Create Development Environment on AWS using Terraform :)
 
 ![tf_aws ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/ce02599c-20bb-44cd-8964-e34c81e33018)
 
@@ -10,9 +10,10 @@
 
 ![Slide1](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/94c3c33a-938e-4cd4-ac2b-20917bc6a5ee)
 
-# Step 1:
+# Step 1: AWS Provider
 
 - Create a file `providers.tf`
+
 ```bash
 terraform {
   required_providers {
@@ -29,17 +30,18 @@ provider "aws" {
   profile                 = "[replace you aws user]"
 }
 ```
+
 And run this command `terraform init`
 
-- Terraform Docs for[AWS_Provide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
+- Terraform Docs for [AWS_Provide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
 
 # Step 2: Create a VPC environment
 
 ## Step 2.1: Deploy the VPC
 
 - Create a file `main.tf `
-- 
-```bash
+ 
+```
 resource "aws_vpc" "dhruv_vpc" {
   cidr_block           = "10.123.0.0/16"
   enable_dns_hostnames = true
@@ -52,13 +54,14 @@ resource "aws_vpc" "dhruv_vpc" {
 ```
 
 ![vpc ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/4d1670c2-8f19-440e-ab92-bb62f17826f5)
+
 - Terraform Docs Reference for creating a [VPC](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc)
 
 ## Step 2.2: Deploy Subnet
 
 - Add subnet configuretions in `main.tf`
 
-```bash
+```
 resource "aws_subnet" "dhruv_public_subnet" {
   vpc_id                  = aws_vpc.dhruv_vpc.id
   cidr_block              = "10.123.1.0/24"
@@ -97,7 +100,7 @@ resource "aws_internet_gateway" "dhruv_internet_gateway" {
 
 - Add Route Table configuretions in `main.tf`.
 
-```bash
+```
 resource "aws_route_table" "dhruv_public_rt" {
   vpc_id = aws_vpc.dhruv_vpc.id
 
@@ -107,19 +110,26 @@ resource "aws_route_table" "dhruv_public_rt" {
 }
 ```
 
+- Terraform Docs Reference for creating a [Route Table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table).
+
 ### Step 2.4.1: Defining Route
+
 - Add Route in `main.tf`
-```bash
+
+```
 resource "aws_route" "def_route" {
   route_table_id         = aws_route_table.dhruv_public_rt.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.dhruv_internet_gateway.id
 }
 ```
+- Terraform Docs Reference for defining a [Route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route).
 
 ### Step 2.4.2: Associate subnet with Route Table
+
 - Associate subnet with route table in `main.tf`
-```bash
+
+```
 resource "aws_route_table_association" "dhruv_public_assoc" {
   subnet_id      = aws_subnet.dhruv_public_subnet.id
   route_table_id = aws_route_table.dhruv_public_rt.id
@@ -128,15 +138,13 @@ resource "aws_route_table_association" "dhruv_public_assoc" {
 
 ![Rt table ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/111fc7c7-6f27-489c-966e-f0e9f91f9cbb)
 
-- Terraform Docs Reference for creating a [Route Table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table).
-- Terraform Docs Reference for defining a [Route](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route).
 - Terraform Docs for [Route table association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association).
 
 ## Step 2.5: Create Security Group
 
 - Add sucurity group in `main.tf`
 
-```bash
+```
 resource "aws_security_group" "dhruv_sg" {
   name        = "dev_sg"
   description = "dev security Group"
@@ -181,6 +189,7 @@ data "aws_ami" "server_ami" {
   }
 }
 ```
+
 - Terraform Docs for [AMI](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ami).
 
  ## Step 3.2: Create Key-Pairs
@@ -349,11 +358,11 @@ host_os = "linux"
 
 ![linux var](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/305ce99e-ad8b-4851-bfe5-0d5ccadfb1cb)
 
-- Hear `terraform.tfvars` takes a precedence over a default `variable.tf` file.
+- Here `terraform.tfvars` takes a precedence over a default `variable.tf` file.
 
 ![unix var](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/5e0bdd08-3406-4e93-a9cd-3b826a48a0bd)
 
-- Hear `variable inline command` takes a precedence over a `terraform.tfvars` file.
+- Here `variable inline command` takes a precedence over a `terraform.tfvars` file.
 
 - Terraform Docs for [variable](https://developer.hashicorp.com/terraform/language/values/variables).
 
@@ -389,24 +398,27 @@ output "dev_ip" {
 
 - Terraform Docs for [output values](https://developer.hashicorp.com/terraform/language/values/outputs).
 
-```teraform fmt```
+### Here some Terraform commands use in this project
+
+- ```teraform fmt```
 - The `terraform fmt` command is used to rewrite Terraform configuration files to a canonical format and style. This command applies a subset of the Terraform language style conventions, along with other minor adjustments for readability.
 
-```terraform state```
+- ```terraform state```
 - The command will list all resources in the state file matching the given addresses (if any). If no addresses are given, all resources are listed.
+
 ![tf state list](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/031fbf1a-a415-4585-a5e1-0cbea66dcd06)
 
-```terraform plan```
+- `terraform plan`
 - The `terraform plan` command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. By default, when Terraform creates a plan it:
--- Reads the current state of any already-existing remote objects to make sure that the Terraform state is up-to-date.
--- Compares the current configuration to the prior state and noting any differences.
--- Proposes a set of change actions that should, if applied, make the remote objects match the configuration.
+- Reads the current state of any already-existing remote objects to make sure that the Terraform state is up-to-date.
+- Compares the current configuration to the prior state and noting any differences.
+- Proposes a set of change actions that should, if applied, make the remote objects match the configuration.
 
-```terraform show```
+- `terraform show`
 - The `terraform show` command is used to provide human-readable output from a state or plan file. This can be used to inspect a plan to ensure that the planned operations are expected, or to inspect the current state as Terraform sees it.Machine-readable output is generated by adding the -json command-line flag.
 
-```terraform apply```
+- `terraform apply`
 - When you run `terraform apply` without passing a saved plan file, Terraform automatically creates a new execution plan as if you had run terraform plan, prompts you to approve that plan, and takes the indicated actions. You can use all of the planning modes and planning options to customize how Terraform will create the plan.You can pass the `-auto-approve` option to instruct Terraform to apply the plan without asking for confirmation.
 
-```terraform destroy```
+- `terraform destroy`
 - The `terraform destroy` command is a convenient way to destroy all remote objects managed by a particular Terraform configuration.
