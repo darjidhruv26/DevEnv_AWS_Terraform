@@ -1,10 +1,10 @@
 # Project :)
 
-# Create Development Environment on AWS using Terraform :)
+# Create a Development Environment on AWS using Terraform :)
 
 ![tf_aws ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/ce02599c-20bb-44cd-8964-e34c81e33018)
 
-- HashiCorp Terraform is an infrastructure as code tool that lets you define both cloud and on-prem resources in human-readable configuration files that you can version, reuse, and share. You can then use a consistent workflow to provision and manage all of your infrastructure throughout its lifecycle. Terraform can manage low-level components like compute, storage, and networking resources, as well as high-level components like DNS entries and SaaS features.
+- HashiCorp Terraform is an infrastructure as a code tool that lets you define both cloud and on-prem resources in human-readable configuration files that you can version, reuse, and share. You can then use a consistent workflow to provision and manage all of your infrastructure throughout its lifecycle. Terraform can manage low-level components like computing, storage, and networking resources, as well as high-level components like DNS entries and SaaS features.
 
 # Simple Project Architecture
 
@@ -33,7 +33,7 @@ provider "aws" {
 
 And run this command `terraform init`
 
-- Terraform Docs for [AWS_Provide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
+- Terraform Docs for [AWS Provide](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).
 
 # Step 2: Create a VPC environment
 
@@ -59,7 +59,7 @@ resource "aws_vpc" "dhruv_vpc" {
 
 ## Step 2.2: Deploy Subnet
 
-- Add subnet configuretions in `main.tf`
+- Add subnet configuration in `main.tf`
 
 ```
 resource "aws_subnet" "dhruv_public_subnet" {
@@ -78,11 +78,11 @@ resource "aws_subnet" "dhruv_public_subnet" {
 
 - Terraform Docs Reference for creating a [Subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet).
 
-## Step 2.3: Create Internet Gateway
+## Step 2.3: Create an Internet Gateway
 
-- Add Internet Gateway configuretions in `main.tf`
+- Add Internet Gateway configurations in `main.tf`
 
-```bash
+```
 resource "aws_internet_gateway" "dhruv_internet_gateway" {
   vpc_id = aws_vpc.dhruv_vpc.id
 
@@ -94,11 +94,11 @@ resource "aws_internet_gateway" "dhruv_internet_gateway" {
 
 ![IG ss](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/1cbd05c5-7349-4c10-8260-798efbdc34c5)
 
-- Terraform Docs Reference for creating a [Internet Gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway).
+- Terraform Docs Reference for creating an [Internet Gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway).
 
 ## Step 2.4: Create Route Table
 
-- Add Route Table configuretions in `main.tf`.
+- Add Route Table configuration in `main.tf`.
 
 ```
 resource "aws_route_table" "dhruv_public_rt" {
@@ -140,7 +140,7 @@ resource "aws_route_table_association" "dhruv_public_assoc" {
 
 - Terraform Docs for [Route table association](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association).
 
-## Step 2.5: Create Security Group
+## Step 2.5: Create a Security Group
 
 - Add sucurity group in `main.tf`
 
@@ -168,11 +168,11 @@ resource "aws_security_group" "dhruv_sg" {
 
 - Terraform Docs for creating a [security group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group).
 
-# Step 3: Creating a EC2 Instance
+# Step 3: Creating an EC2 Instance
 
-## Step 3.1: Selecte AMI Id for creating a EC2 Instance
+## Step 3.1: Select AMI Id for creating an EC2 Instance
 
-- In this project we use `Ubuntu Server-20.04`
+- In this project, we use `Ubuntu Server-20.04`
 - AMI ID: `ami-08e5424edfe926b43`
 - AMI Name: `ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20230517`
 - Owner ID: `099720109477`
@@ -205,20 +205,20 @@ data "aws_ami" "server_ami" {
  ```
  
  - Copy this path `C:\Users\Dhruv/.ssh/` and enter your `Key Name`.
- - It look like this
+ - It looks like this
  
  ```C:\Users\Dhruv/.ssh/dhruvkey```
  
- - And then pess `Enter`
+ - And then press `Enter`
  - key was generated After that run this command in terminal `ls ~/.ssh`
  - You can see all directories and files in `C:\Users\Dhruv\.ssh` 
- - In this you can see `dhruvkey` and `dhruvkey.pub`
+ - In this, you can see `dhruvkey` and `dhruvkey.pub`
  
  ### Step 3.2.2: Key Apply
  
- - In this part, we use [terraform file function](https://developer.hashicorp.com/terraform/language/functions/file) for pass public key as file `path`.
+ - In this part, we use [terraform file function](https://developer.hashicorp.com/terraform/language/functions/file) for passing the public key as a file `path`.
  
- - Add this configuretions in `main.tf`.
+ - Add this configuration in `main.tf`.
  
  ```
  resource "aws_key_pair" "dhruv_auth" {
@@ -252,7 +252,7 @@ sudo sudo apt-get install docker-ce docker-ce-cli containerd.io -y &&
 sudo usermod -aG docker ubuntu 
 ```
 
-- Add this EC2 instance configuretions in `main.tf` file.
+- Add this EC2 instance configuration in `main.tf` file.
 
 ```
 resource "aws_instance" "dhruv_node" {
@@ -274,14 +274,14 @@ resource "aws_instance" "dhruv_node" {
  
  - Terraform Docs for [AWS Instances](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance).
 
-## Step 3.4: Connect EC2 instance with local system
+## Step 3.4: Connect the EC2 instance with local system
 
 - For this task run a `ssh -i C:\Users\Dhruv\.ssh\dhruvkey ubuntu@13.233.64.121` in terminal and press `Enter` -> Type `Yes` -> (you are in instance)  
 
 # Step 4: Create SSH Config Scripts
 
 - This SSH configuration script is to allow VS Code to connect our EC2 Instance.
-- Create Template file `windows-ssh-config.tpl` for windows system.
+- Create Template file `windows-ssh-config.tpl` for Windows system.
 
 ```
 add-content -path C:/Users/Dhruv/.ssh/config -value @'
@@ -321,9 +321,9 @@ EOF
 }
 ```
 
-- After provisioner run this command in terminal `cat ~/.ssh/config`.
+- After the provisioner run this command in terminal `cat ~/.ssh/config`.
 
-- Output is look like this.
+- The output looks like this.
 
 ![ssh config](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/cbb0b9d5-1689-4c0d-99fc-a49c7740873e)
 
@@ -335,9 +335,9 @@ EOF
 
 Terraform Docs [provisioners](https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax)
 
-## Step 4.2: Making more Optimized and Dynamic script using Terraform variables
+## Step 4.2: Making a more Optimized and Dynamic script using Terraform variables
 
-- Terraform Variables for choose dynamicly OS
+- Terraform Variables for choosing dynamic OS
 - Use `Variable Precedence`
 - Create variable file `variables.tf`
 
@@ -358,15 +358,15 @@ host_os = "linux"
 
 ![linux var](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/305ce99e-ad8b-4851-bfe5-0d5ccadfb1cb)
 
-- Here `terraform.tfvars` takes a precedence over a default `variable.tf` file.
+- Here `terraform.tfvars` takes precedence over a default `variable.tf` file.
 
 ![unix var](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/5e0bdd08-3406-4e93-a9cd-3b826a48a0bd)
 
-- Here `variable inline command` takes a precedence over a `terraform.tfvars` file.
+- Here `variable inline command` takes precedence over a `terraform.tfvars` file.
 
 - Terraform Docs for [variable](https://developer.hashicorp.com/terraform/language/values/variables).
 
-## Step 4.3: Use Conditional Expressions for choose a `interpreter`
+## Step 4.3: Use Conditional Expressions for choosing an `interpreter`
 
 - Add this `provisioner` code in `main.tf` file.
   
@@ -386,7 +386,7 @@ host_os = "linux"
 
 - Terraform Docs for [conditional expression](https://developer.hashicorp.com/terraform/language/expressions/conditionals).
 
-# Step 5: Cerate Output values
+# Step 5: Create Output values
 
 - Create `output.tf` file.
 
@@ -400,7 +400,7 @@ output "dev_ip" {
 
 ### Here some Terraform commands use in this project
 
-`teraform fmt`
+`terraform fmt`
 - The `terraform fmt` command is used to rewrite Terraform configuration files to a canonical format and style. This command applies a subset of the Terraform language style conventions, along with other minor adjustments for readability.
 
 `terraform state`
@@ -411,14 +411,14 @@ output "dev_ip" {
 `terraform plan`
 - The `terraform plan` command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. By default, when Terraform creates a plan it:
 - Reads the current state of any already-existing remote objects to make sure that the Terraform state is up-to-date.
-- Compares the current configuration to the prior state and noting any differences.
+- Compares the current configuration to the prior state and notes any differences.
 - Proposes a set of change actions that should, if applied, make the remote objects match the configuration.
 
 `terraform show`
-- The `terraform show` command is used to provide human-readable output from a state or plan file. This can be used to inspect a plan to ensure that the planned operations are expected, or to inspect the current state as Terraform sees it.Machine-readable output is generated by adding the -json command-line flag.
+- The `terraform show` command is used to provide human-readable output from a state or plan file. This can be used to inspect a plan to ensure that the planned operations are expected or to inspect the current state as Terraform sees it. Machine-readable output is generated by adding the -json command-line flag.
 
 `terraform apply`
-- When you run `terraform apply` without passing a saved plan file, Terraform automatically creates a new execution plan as if you had run terraform plan, prompts you to approve that plan, and takes the indicated actions. You can use all of the planning modes and planning options to customize how Terraform will create the plan.You can pass the `-auto-approve` option to instruct Terraform to apply the plan without asking for confirmation.
+- When you run `terraform apply` without passing a saved plan file, Terraform automatically creates a new execution plan as if you had run terraform plan, prompts you to approve that plan, and takes the indicated actions. You can use all of the planning modes and planning options to customize how Terraform will create the plan. You can pass the `-auto-approve` option to instruct Terraform to apply the plan without asking for confirmation.
 
 `terraform destroy`
 - The `terraform destroy` command is a convenient way to destroy all remote objects managed by a particular Terraform configuration.
