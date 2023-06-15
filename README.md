@@ -6,6 +6,10 @@
 
 - HashiCorp Terraform is an infrastructure as code tool that lets you define both cloud and on-prem resources in human-readable configuration files that you can version, reuse, and share. You can then use a consistent workflow to provision and manage all of your infrastructure throughout its lifecycle. Terraform can manage low-level components like compute, storage, and networking resources, as well as high-level components like DNS entries and SaaS features.
 
+# Simple Project Architecture
+
+![Slide1](https://github.com/darjidhruv26/DevEnv_AWS_Terraform/assets/90086813/94c3c33a-938e-4cd4-ac2b-20917bc6a5ee)
+
 # Step 1:
 
 - Create a file `providers.tf`
