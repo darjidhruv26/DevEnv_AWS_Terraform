@@ -187,7 +187,7 @@ resource "aws_route_table_association" "dhruv_public_assoc" {
 
 ## Step 2.5: Create a Security Group
 
-- Add sucurity group in `main.tf`
+- Add a security group in `main.tf`
 
 ```
 resource "aws_security_group" "dhruv_sg" {
