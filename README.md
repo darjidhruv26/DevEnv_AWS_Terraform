@@ -467,3 +467,5 @@ output "dev_ip" {
 
 `terraform destroy`
 - The `terraform destroy` command is a convenient way to destroy all remote objects managed by a particular Terraform configuration.
+
+### [Medium Blog Link](https://medium.com/aws-tip/create-a-development-environment-on-aws-using-terraform-72eb8e204383)
